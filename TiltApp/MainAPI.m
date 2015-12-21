@@ -60,8 +60,6 @@
 
 -(NSDictionary *)formatHoursData:(NSDictionary *)dictonary {
     
-    NSLog(@"format hours");
-    
     NSArray *timeframes = [[[dictonary valueForKey:@"response"]valueForKey:@"hours"]valueForKey:@"timeframes"];
     if (!timeframes) {
         timeframes = [[[dictonary valueForKey:@"response"]valueForKey:@"popular"]valueForKey:@"timeframes"];
@@ -131,9 +129,7 @@
               @"close": closeStr,
               @"isOpen": @(isOpen)
               };
-    
-    NSLog(@"end format hours");
-    
+        
     return hours;
 }
 
