@@ -60,6 +60,8 @@
 
 -(NSDictionary *)formatHoursData:(NSDictionary *)dictonary {
     
+    NSLog(@"format hours");
+    
     NSArray *timeframes = [[[dictonary valueForKey:@"response"]valueForKey:@"hours"]valueForKey:@"timeframes"];
     if (!timeframes) {
         timeframes = [[[dictonary valueForKey:@"response"]valueForKey:@"popular"]valueForKey:@"timeframes"];
@@ -75,7 +77,9 @@
     
     for (NSDictionary *item in timeframes) {
         if ([item valueForKey:@"includesToday"]) {
-            open = [[item valueForKey:@"open"]objectAtIndex:0];
+            if ([[item valueForKey:@"open"]count] != 0) {
+                open = [[item valueForKey:@"open"]objectAtIndex:0];
+            }
         }
     }
     
@@ -127,6 +131,8 @@
               @"close": closeStr,
               @"isOpen": @(isOpen)
               };
+    
+    NSLog(@"end format hours");
     
     return hours;
 }
@@ -282,6 +288,8 @@
     [request setURL:url];
     
     void (^coffeeBlock)(NSData *, NSURLResponse *, NSError *) = ^ (NSData *data, NSURLResponse *res, NSError *err) {
+        
+        NSLog(@"coffee block");
         
         if (err) {
             [self.delegate mainAPIDidThrowError:err];
