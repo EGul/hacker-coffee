@@ -85,33 +85,8 @@
         return hours;
     }
     
-    int start = [[open valueForKey:@"start"]intValue];
-    int end = [[open valueForKey:@"end"]intValue];
-    
-    NSMutableString *openStr = [[NSMutableString alloc]initWithString:@""];
-    NSMutableString *closeStr = [[NSMutableString alloc]initWithString:@""];
-    
-    if (start < 1200) {
-        openStr = [NSMutableString stringWithFormat:@"%d%@", start, @"am"];
-    }
-    else {
-        openStr = [NSMutableString stringWithFormat:@"%d%@", start - 1200, @"pm"];
-    }
-    
-    if (end < 1200) {
-        closeStr = [NSMutableString stringWithFormat:@"%d%@", end, @"am"];
-    }
-    else {
-        closeStr = [NSMutableString stringWithFormat:@"%d%@", end - 1200, @"pm"];
-    }
-    
-    if (start != 0) {
-        [openStr insertString:@":" atIndex:openStr.length - 4];
-        
-    }
-    if (end != 0) {
-        [closeStr insertString:@":" atIndex:closeStr.length - 4];
-    }
+    NSString *start = [open valueForKey:@"start"];
+    NSString *end = [open valueForKey:@"end"];
     
     NSDateFormatter *df = [[NSDateFormatter alloc]init];
     [df setDateFormat:@"HH:mm"];
@@ -120,13 +95,21 @@
     
     BOOL isOpen = false;
     
-    if (currentTimeInt >= start && currentTimeInt < end) {
+    if (currentTimeInt >= start.intValue && currentTimeInt < end.intValue) {
         isOpen = true;
     }
     
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    formatter.dateFormat = @"HHmm";
+    
+    NSDate *startDate = [formatter dateFromString:start];
+    NSDate *endDate = [formatter dateFromString:end];
+    
+    formatter.dateFormat = @"h:mma";
+    
     hours = @{
-              @"open": openStr,
-              @"close": closeStr,
+              @"open": [formatter stringFromDate:startDate],
+              @"close": [formatter stringFromDate:endDate],
               @"isOpen": @(isOpen)
               };
         
